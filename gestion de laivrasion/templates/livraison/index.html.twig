@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Livraisons{% endblock %}
+
+{% block body %}
+    <style>
+        /* Style de base pour la table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Style pour la pagination */
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination li {
+            margin-right: 10px;
+        }
+
+        .pagination a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .pagination a:hover {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .pagination .active {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        /* Style pour le lien "Ajouter une Livraison" */
+        a[href^="{{ path('livraison_new') }}"] {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        /* Style pour le bouton d'export PDF */
+        .btn-primary {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Style pour le titre h1 */
+        h1 {
+            color: #333;
+        }
+
+        /* Style pour les liens de la table */
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+    <h1>Liste des Livraisons</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom du Livreur</th>
+            <th>Date de Livraison</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for livraison in livraisons %}
+            <tr>
+                <td>{{ livraison.id }}</td>
+                <td>{{ livraison.nomLivreur }}</td>
+                <td>{{ livraison.dateLivraison|date('Y-m-d H:i:s') }}</td>
+                <td>
+                    <a href="{{ path('livraison_show', {'id': livraison.id}) }}">Voir</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+<br>
+    <div class="pagination">
+        {{ knp_pagination_render(livraisons) }}
+    </div>
+
+    <a href="{{ path('livraison_new') }}">Ajouter une Livraison</a>
+
+    <form action="{{ path('livraison_pdf') }}" method="get" style="display:inline;">
+        {# Use the first livraison ID for the export, adjust as needed based on your requirement #}
+        {% if livraisons|length > 0 %}
+            <input type="hidden" name="livraison_id" value="{{ livraisons[0].id }}">
+        {% endif %}
+        <button type="submit" class="btn btn-primary">Export to PDF</button>
+    </form>
+    <a href="{{ path('livraison_statistics') }}" class="btn btn-primary">Voir statistiques de livraison</a>
+
+{% endblock %}

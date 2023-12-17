@@ -1,0 +1,26 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+livraison_index:
+  path: /livraisons
+  controller: App\Controller\LivraisonController::index
+
+livraison_new:
+  path: /livraison/new
+  controller: App\Controller\LivraisonController::new
+  methods: ['GET', 'POST']
+
+livraison_show:
+  path: /livraison/{id}
+  controller: App\Controller\LivraisonController::show
+  methods: ['GET']
+  requirements:
+    id: \d+  # Assurez-vous que l'id est un nombre
+livraison_pdf:
+  path: /livraison/pdf
+  controller: App\Controller\LivraisonController::generatePdf
+  methods: ['GET', 'POST']
+
+livraison_statistics:
+  path: /livraison/statistics
+  controller: App\Controller\LivraisonController::statistics

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/eya/pom.xml" />
+        <option value="$PROJECT_DIR$/arwa/pom.xml" />
+        <option value="$PROJECT_DIR$/eurkea/pom.xml" />
+        <option value="$PROJECT_DIR$/sabrine/pom.xml" />
+        <option value="$PROJECT_DIR$/MicroService-main/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="17" project-jdk-type="JavaSDK" />
+</project>

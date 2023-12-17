@@ -1,0 +1,82 @@
+{# templates/livraison/show.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Livraison{% endblock %}
+
+{% block body %}
+    <style>
+        /* Style for the page of delivery details */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            max-width: 400px;
+            padding: 50px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #3498db;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 25px;
+        }
+
+        th, td {
+            padding: 20px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        a {
+            display: block;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <div class="card">
+        <h1>Détails de la Livraison</h1>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <td>{{ livraison.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom du Livreur</th>
+                <td>{{ livraison.nomLivreur }}</td>
+            </tr>
+            <tr>
+                <th>Date de Livraison</th>
+                <td>{{ livraison.dateLivraison|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        </table>
+
+        <a href="{{ path('livraison_index') }}">Retour à la liste des Livraisons</a>
+        {# Add a form for exporting to PDF #}
+    </div>
+
+{% endblock %}

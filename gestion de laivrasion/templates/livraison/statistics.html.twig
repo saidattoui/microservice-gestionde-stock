@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+{# base.html.twig or your specific template #}
+
+
+{% block title %}Livraison Statistics{% endblock %}
+
+{% block body %}
+    <h1>Livraison Statistics</h1>
+
+    <canvas id="livraisonChart" width="400" height="200"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('livraisonChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        {% for stat in statistiques %}
+                        '{{ stat.mois }}',
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: 'Total Deliveries',
+                        data: [
+                            {% for stat in statistiques %}
+                            {{ stat.total }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

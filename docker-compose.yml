@@ -1,0 +1,134 @@
+version: "3.9"
+services:
+  fournisseur:
+    container_name: fournisseur
+    image: "conu"
+    build: .\said
+    hostname: fournisseur
+    ports:
+      - "8021:8021"
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE=http://eureka:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=true
+    links:
+      - "eureka"
+    networks:
+      - hotel
+    depends_on:
+      - "eureka"
+
+  eureka:
+    container_name: eureka
+    build: .\eureka
+    hostname: eureka
+    ports:
+      - "8761:8761"
+    image: "eurkea"
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE=http://eureka:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+    networks:
+      - hotel
+
+  commande:
+    container_name: commande
+    image: "ges"
+    build: .\arwa
+    hostname: commande
+    ports:
+      - "8053:8053"
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE=http://eureka:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:h2:mem:testdb
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=sa
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=true
+    links:
+      - "eureka"
+    networks:
+      - hotel
+    depends_on:
+      - "eureka"
+  db-mysql:
+    image: "mysql:5.6"
+    container_name: db-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3305:3305"
+    restart: unless-stopped
+    networks:
+      - hotel
+  gestionstock:
+    container_name: gestionstock
+    image: "st"
+    build: .\Sabrine
+    hostname: gestionstock
+    ports:
+      - "8050:8050"
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE=http://eureka:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/stocks?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=true
+    restart: unless-stopped
+  
+    networks:
+      - hotel
+    depends_on:
+      - "eureka"
+      - "db-mysql"
+  gestionp:
+    container_name: gestionp
+    image: "ge"
+    build: .\Eya
+    hostname: gestionp
+    ports:
+      - "8430:8430"
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE=http://eureka:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/gestionproduits?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=true
+    restart: unless-stopped
+
+    networks:
+      - hotel
+    depends_on:
+      - "eureka"
+      - "db-mysql" 
+  apigateway:
+    image: ap
+    build: .\apigatwey
+    hostname: apigateway
+    ports:
+      - "8090:8090"
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE=http://eureka:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=true
+      - spring.cloud.gateway.discovery.locator.enabled=true
+      
+    networks:
+      - hotel
+    links:
+      - "eureka"
+      - "fournisseur"
+      - "commande"
+      - "gestionstock"
+      - "gestionp"
+      
+      
+    depends_on:
+      - "eureka"
+
+networks:
+  hotel:
+    driver: bridge
